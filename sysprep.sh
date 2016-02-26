@@ -17,6 +17,9 @@ verbose() {
 
 run() {
 	verbose "$@"
+	removefiles=`echo "$@" | grep 'rm ' |\
+		sed  -e 's/rm -f //' -e 's/rm -rf //'`
+	find $removefiles 2>/dev/null | sed 's/^/# remove /'
 }
 
 actually_run() {
@@ -125,7 +128,7 @@ ca_certificates() {
 	run "rm -f /etc/pki/CA/newcerts/*.crt"
 	run "rm -f /etc/pki/CA/private/*.key"
 	run "rm -f /etc/pki/tls/private/*.key"
-	crts=`find /etc/pki/tls/certs/*.crt`
+	crts=`find /etc/pki/tls/certs/*.crt 2>/dev/null`
 	for i in $crts; do
 		[ $i = "/etc/pki/tls/certs/ca-bundle.crt" ] &&
 			continue
