@@ -15,16 +15,21 @@ verbose() {
 	echo "$@"
 }
 
-run() {
-	verbose "$@"
+show_rm() {
 	removefiles=`echo "$@" | grep 'rm ' |\
 		sed  -e 's/rm -f //' -e 's/rm -rf //'`
 	[ "$removefiles" ] &&
 		find $removefiles 2>/dev/null | sed 's/^/# remove /'
 }
 
+run() {
+	verbose "$@"
+	show_rm "$@"
+}
+
 actually_run() {
 	verbose "$@"
+	show_rm "$@"
 	cmd="$1"
 	shift
 	$cmd "$@"
