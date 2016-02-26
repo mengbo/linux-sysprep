@@ -19,7 +19,8 @@ run() {
 	verbose "$@"
 	removefiles=`echo "$@" | grep 'rm ' |\
 		sed  -e 's/rm -f //' -e 's/rm -rf //'`
-	find $removefiles 2>/dev/null | sed 's/^/# remove /'
+	[ "$removefiles" ] &&
+		find $removefiles 2>/dev/null | sed 's/^/# remove /'
 }
 
 actually_run() {
