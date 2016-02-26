@@ -356,10 +356,10 @@ pacct_log() {
 
 package_manager_cache() {
 	verbose "# Remove package manager cache"
-	run "rm -rf /var/cache/apt/archives/*"
-	run "rm -rf /var/cache/dnf/*"
-	run "rm -rf /var/cache/yum/*"
-	run "rm -rf /var/cache/zypp*/*"
+	run "rm -rf /var/cache/apt/archives/"
+	run "rm -rf /var/cache/dnf/"
+	run "rm -rf /var/cache/yum/"
+	run "rm -rf /var/cache/zypp*"
 	verbose
 }
 
