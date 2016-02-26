@@ -152,10 +152,15 @@ crash_data() {
 	verbose
 }
 
-# Todo
 cron_spool() {
 	verbose "# Remove user at-jobs and cron-jobs"
-	run
+	$users=`grep bash /etc/passwd | cut -d : -f 1`
+	for u in $users; do
+		for a in `sudo -u $u at -l | cut -f 1`; do
+			run "sudo -u $u at -r $a"
+		done
+		run "crontab -u $u -r"
+	done
 	verbose
 }
 
