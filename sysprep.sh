@@ -154,12 +154,16 @@ crash_data() {
 
 cron_spool() {
 	verbose "# Remove user at-jobs and cron-jobs"
+	jobs=`at -l | cut -f 1`
+	for j in $jobs; do
+		run "at -r $j"
+	done
+	[ -f /var/spool/cron/atjobs/.SEQ ] &&
+		run "echo 0 > /var/spool/cron/atjobs/.SEQ"
+	[ -f /var/spool/at/.SEQ ] &&
+		run "echo 0 > /var/spool/at/.SEQ"
 	users=`grep bash /etc/passwd | cut -d : -f 1`
 	for u in $users; do
-		jobs=`sudo -u $u at -l | cut -f 1`
-		for j in $jobs; do
-			run "sudo -u $u at -r $j"
-		done
 		run "crontab -u $u -r"
 	done
 	verbose
